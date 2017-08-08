@@ -123,6 +123,27 @@ class Memory implements PersistorInterface
         return $tasks;
     }
 
+    /**
+     *
+     * @param  array $task
+     *
+     * @return void
+     */
+    public function failTask($task)
+    {
+        // NOT IMPLEMENTED
+    }
+
+    /**
+     *
+     * @param  array $task
+     *
+     * @return void
+     */
+    public function retryTask($task)
+    {
+        // NOT IMPLEMENTED
+    }
 
     /**
      * Clear queue

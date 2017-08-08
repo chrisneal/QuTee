@@ -18,7 +18,12 @@ class Worker
      * Run every 5 seconds by default
      */
     const DEFAULT_INTERVAL = 5;
-    
+
+    /**
+     * Try every task 3 times by default
+     */
+    const DEFAULT_ATTEMPTS = 3;
+
     const EVENT_START_PROCESSING_TASK = 'qutee.worker.start_processing_task';
     const EVENT_END_PROCESSING_TASK = 'qutee.worker.end_processing_task';
 
@@ -28,6 +33,13 @@ class Worker
      * @var int
      */
     protected $_interval = self::DEFAULT_INTERVAL;
+
+    /**
+     * Retry every task X times before failing
+     *
+     * @var int
+     */
+    protected $_attempts = self::DEFAULT_ATTEMPTS;
 
     /**
      * Do only tasks with this priority or all if priority is null
@@ -72,6 +84,28 @@ class Worker
     public function setInterval($interval)
     {
         $this->_interval = $interval;
+
+        return $this;
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function getAttempts()
+    {
+        return $this->_attempts;
+    }
+
+    /**
+     *
+     * @param int $interval
+     *
+     * @return Worker
+     */
+    public function setAttempts($attempts)
+    {
+        $this->_attempts = $attempts;
 
         return $this;
     }
@@ -150,15 +184,25 @@ class Worker
         $event = new Event($this);
         $event->setArgument('startTime', $this->_startTime);
         $event->setTask($task);
-        
+
         $this->getQueue()->getEventDispatcher()->dispatch(self::EVENT_START_PROCESSING_TASK, $event);
-        
-        $this->_runTask($task);
-        
+
+        try {
+            $this->_runTask($task);
+        } catch (Exception $e) {
+            if ($task['attempts'] >= $this->_attempts) {
+                $this->getQueue()->failTask($task);
+            } else {
+                $this->getQueue()->retryTask($task);
+            }
+
+            throw $e;
+        }
+
         $event = new Event($this);
         $event->setArgument('elapsedTime', $this->_getPassedTime());
         $event->setTask($task);
-        
+
         $this->getQueue()->getEventDispatcher()->dispatch(self::EVENT_END_PROCESSING_TASK, $event);
 
         // After working, sleep

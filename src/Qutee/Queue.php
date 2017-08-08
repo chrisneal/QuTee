@@ -25,7 +25,7 @@ class Queue
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $_eventDispatcher;
-    
+
     /**
      *
      * @var \Qutee\Queue
@@ -38,7 +38,7 @@ class Queue
     }
 
     /**
-     * 
+     *
      * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     public function getEventDispatcher()
@@ -50,9 +50,9 @@ class Queue
     }
 
     /**
-     * 
+     *
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     * 
+     *
      * @return \Qutee\Queue
      */
     public function setEventDispatcher(\Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher)
@@ -95,7 +95,7 @@ class Queue
 
         $event = new Event($this);
         $event->setTask($task);
-        
+
         $this->getEventDispatcher()->dispatch(self::EVENT_ADD_TASK, $event);
 
         return $this;
@@ -124,6 +124,28 @@ class Queue
     }
 
     /**
+     *
+     * @param  array $task
+     *
+     * @return void
+     */
+    public function failTask($task)
+    {
+        $this->getPersistor()->failTask($task);
+    }
+
+    /**
+     *
+     * @param  array $task
+     *
+     * @return void
+     */
+    public function retryTask($task)
+    {
+        $this->getPersistor()->retryTask($task);
+    }
+
+    /**
      * Clear all tasks
      *
      * @return boolean
@@ -137,7 +159,7 @@ class Queue
             $this->getEventDispatcher()->dispatch(self::EVENT_CLEAR_ALL_TASKS, $event);
             return true;
         }
-        
+
         return false;
     }
 

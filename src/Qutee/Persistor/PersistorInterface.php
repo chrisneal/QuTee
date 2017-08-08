@@ -54,6 +54,24 @@ interface PersistorInterface
     public function getTasks($priority = null);
 
     /**
+     * Marks a task as failed
+     *
+     * @param  array $task The task to fail
+     *
+     * @return void
+     */
+    public function failTask($task);
+
+    /**
+     * Marks a task as ready to be retried
+     *
+     * @param  array $task
+     *
+     * @return void
+     */
+    public function retryTask($task);
+
+    /**
      * Clear all tasks from queue
      *
      * @return boolean

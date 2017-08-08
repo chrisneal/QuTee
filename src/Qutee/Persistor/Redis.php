@@ -141,6 +141,27 @@ class Redis implements PersistorInterface
         return $tasks;
     }
 
+    /**
+     *
+     * @param  array $task
+     *
+     * @return void
+     */
+    public function failTask($task)
+    {
+        // NOT IMPLEMENTED
+    }
+
+    /**
+     *
+     * @param  array $task
+     *
+     * @return void
+     */
+    public function retryTask($task)
+    {
+        // NOT IMPLEMENTED
+    }
 
     /**
      * Clear queue
@@ -190,7 +211,6 @@ class Redis implements PersistorInterface
     protected function _getRedis()
     {
         if (null === $this->_redis) {
-
             $host = isset($this->_options['host']) ? $this->_options['host'] : '127.0.0.1';
             $port = isset($this->_options['port']) ? $this->_options['port'] : 6379;
 
@@ -223,5 +243,4 @@ class Redis implements PersistorInterface
 
         return $this->_redis;
     }
-
 }

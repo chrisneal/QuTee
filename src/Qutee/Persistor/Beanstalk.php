@@ -13,7 +13,6 @@ use Qutee\Task;
  */
 class Beanstalk implements PersistorInterface
 {
-
     const TUBE_NAME = 'qutee';
 
     /**
@@ -107,6 +106,28 @@ class Beanstalk implements PersistorInterface
     }
 
     /**
+     *
+     * @param  array $task
+     *
+     * @return void
+     */
+    public function failTask($task)
+    {
+        // NOT IMPLEMENTED
+    }
+
+    /**
+     *
+     * @param  array $task
+     *
+     * @return void
+     */
+    public function retryTask($task)
+    {
+        // NOT IMPLEMENTED
+    }
+
+    /**
      * Clear queue
      *
      * @return boolean
@@ -127,7 +148,6 @@ class Beanstalk implements PersistorInterface
     protected function _getClient()
     {
         if (null === $this->_client) {
-            
             $host = isset($this->_options['host']) ? $this->_options['host'] : '127.0.0.1';
             $port = isset($this->_options['port']) ? $this->_options['port'] : 11300;
             $connectTimeout = isset($this->_options['connect_timeout']) ? $this->_options['connect_timeout'] : null;
@@ -139,13 +159,13 @@ class Beanstalk implements PersistorInterface
     }
 
     /**
-     * QuTee - Higher the number, higher the priority; 
+     * QuTee - Higher the number, higher the priority;
      * Beanstalkd - Lower the number, higher the priority
-     * 
+     *
      * @param int $priority
-     * 
+     *
      * @return int
-     */    
+     */
     protected function _convertPriority($priority)
     {
         if (!is_numeric($priority)) {
@@ -157,7 +177,7 @@ class Beanstalk implements PersistorInterface
             case Task::PRIORITY_LOW:
                 // Least urgent Beanstalkd priority
                 return 4294967295;
-                
+
             case Task::PRIORITY_NORMAL:
                 return PheanstalkInterface::DEFAULT_PRIORITY;
 
