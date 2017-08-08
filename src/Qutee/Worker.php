@@ -183,12 +183,12 @@ class Worker
 
         $event = new Event($this);
         $event->setArgument('startTime', $this->_startTime);
-        $event->setTask($task);
+        $event->setTask($task['data']);
 
         $this->getQueue()->getEventDispatcher()->dispatch(self::EVENT_START_PROCESSING_TASK, $event);
 
         try {
-            $this->_runTask($task['task']);
+            $this->_runTask($task['data']);
         } catch (\Exception $e) {
             if ($task['attempts'] >= $this->_attempts) {
                 $this->getQueue()->failTask($task);
@@ -201,7 +201,7 @@ class Worker
 
         $event = new Event($this);
         $event->setArgument('elapsedTime', $this->_getPassedTime());
-        $event->setTask($task);
+        $event->setTask($task['data']);
 
         $this->getQueue()->getEventDispatcher()->dispatch(self::EVENT_END_PROCESSING_TASK, $event);
 
