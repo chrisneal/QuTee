@@ -91,7 +91,7 @@ class Beanstalk implements PersistorInterface
 
         $this->_getClient()->delete($data);
 
-        return $task;
+        return ['data' => $task];
     }
 
     /**
@@ -113,7 +113,7 @@ class Beanstalk implements PersistorInterface
      */
     public function failTask($task)
     {
-        // NOT IMPLEMENTED
+        throw new \BadMethodCallException('Method not supported for Beanstalk persistor');
     }
 
     /**
@@ -124,7 +124,7 @@ class Beanstalk implements PersistorInterface
      */
     public function retryTask($task)
     {
-        // NOT IMPLEMENTED
+        throw new \BadMethodCallException('Method not supported for Beanstalk persistor');
     }
 
     /**

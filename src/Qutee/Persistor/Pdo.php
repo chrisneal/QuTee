@@ -158,7 +158,8 @@ class Pdo implements PersistorInterface
             return null;
         }
 
-        return unserialize($taskData['data']);
+        $taskData['data'] = unserialize($taskData['data']);
+        return $taskData;
     }
 
     /**
@@ -182,7 +183,8 @@ class Pdo implements PersistorInterface
         $tasks  = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         foreach ($tasks as $k => $data) {
-            $tasks[$k]  = unserialize($data['data']);
+            $data['data'] = unserialize($data['data']);
+            $tasks[$k]    = $data['data'];
         }
 
         return $tasks;

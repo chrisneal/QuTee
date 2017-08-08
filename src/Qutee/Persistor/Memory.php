@@ -98,7 +98,7 @@ class Memory implements PersistorInterface
                 $task = unserialize($task);
             }
 
-            return $task;
+            return ['data' => $task];
         }
     }
 
@@ -117,7 +117,7 @@ class Memory implements PersistorInterface
                 continue;
             }
 
-            $tasks[] = $task;
+            $tasks[] = ['data' => $task];
         }
 
         return $tasks;
@@ -131,7 +131,7 @@ class Memory implements PersistorInterface
      */
     public function failTask($task)
     {
-        // NOT IMPLEMENTED
+        throw new \BadMethodCallException('Method not supported for Memory persistor');
     }
 
     /**
@@ -142,7 +142,7 @@ class Memory implements PersistorInterface
      */
     public function retryTask($task)
     {
-        // NOT IMPLEMENTED
+        throw new \BadMethodCallException('Method not supported for Memory persistor');
     }
 
     /**

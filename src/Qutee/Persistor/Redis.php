@@ -74,7 +74,7 @@ class Redis implements PersistorInterface
         $this->_getRedis()->set($key, $queue);
 
         // Add task to queue
-        $data = serialize(array('task' => serialize($task), 'key' => $key));
+        $data = serialize(array('data' => serialize($task), 'key' => $key));
         $this->_getRedis()->rpush($queue, $data);
 
         return $this;
@@ -108,7 +108,9 @@ class Redis implements PersistorInterface
         // @todo events should fire methods: before processing, processing, afterFailedProcessing, afterSuccessfulProcessing
         $this->_getRedis()->del($taskData['key']);
 
-        return unserialize($taskData['task']);
+        $taskData['data'] = unserialize($taskData['data']);
+
+        return $taskData;
     }
 
     /**
@@ -134,8 +136,9 @@ class Redis implements PersistorInterface
         }
 
         foreach ($tasks as $k => $data) {
-            $data       = unserialize($data);
-            $tasks[$k]  = unserialize($data['task']);
+            $data         = unserialize($data);
+            $data['data'] = unserialize($data['data']);
+            $tasks[$k]  = $data;
         }
 
         return $tasks;
@@ -149,7 +152,7 @@ class Redis implements PersistorInterface
      */
     public function failTask($task)
     {
-        // NOT IMPLEMENTED
+        throw new \BadMethodCallException('Method not supported for Redis persistor');
     }
 
     /**
@@ -160,7 +163,7 @@ class Redis implements PersistorInterface
      */
     public function retryTask($task)
     {
-        // NOT IMPLEMENTED
+        throw new \BadMethodCallException('Method not supported for Redis persistor');
     }
 
     /**

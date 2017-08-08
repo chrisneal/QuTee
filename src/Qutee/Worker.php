@@ -188,8 +188,8 @@ class Worker
         $this->getQueue()->getEventDispatcher()->dispatch(self::EVENT_START_PROCESSING_TASK, $event);
 
         try {
-            $this->_runTask($task);
-        } catch (Exception $e) {
+            $this->_runTask($task['task']);
+        } catch (\Exception $e) {
             if ($task['attempts'] >= $this->_attempts) {
                 $this->getQueue()->failTask($task);
             } else {
